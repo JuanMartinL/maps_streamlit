@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
+import itertools
+
 
 # Load your cleaned dataset
 @st.cache_data
@@ -11,19 +13,29 @@ def load_data():
 df = load_data()
 
 # Sidebar filter
-st.sidebar.title("Filtro por categoría")
+st.sidebar.title("🎯 Filtros")
 all_categories = sorted(df['sub_category'].unique())
 selected_categories = st.sidebar.multiselect(
-    "Seleccione la categoría para filtrar::",
+    "Seleccione una o más categorías:",
     options=all_categories,
     default=all_categories
 )
+
+# Selector de columnas
+st.sidebar.markdown("----")
+st.sidebar.subheader("📌 Columnas a mostrar")
+all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
+selected_columns = st.sidebar.multiselect(
+    "Seleccione columnas:",
+    options=all_columns,
+    default=all_columns
+)
+
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
 
 # Assign colors to each subcategory
-import itertools
 colors = itertools.cycle(["blue", "green", "red", "orange", "purple", "darkred", "cadetblue", "pink"])
 color_map = {cat: next(colors) for cat in all_categories}
 
@@ -38,12 +50,32 @@ m = folium.Map(location=[center_lat, center_lon], zoom_start=11)
 for _, row in filtered_df.iterrows():
     folium.Marker(
         location=[row['latitude'], row['longitude']],
-        popup=f"<b>{row['name']}</b><br>{row['municipio']}<br>{row['sub_category']}",
+        popup=f"""
+            <b>{row['name']}</b><br>
+            Municipio: {row['municipio']}<br>
+            Categoría: {row['sub_category']}<br>
+            Tipo: {row['types']}<br>
+            ⭐ Calificación: {row['average_rating']} ({int(row['user_ratings_total'])} reseñas)
+        """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
     ).add_to(m)
 
 # Display
-st.title("Mapa de lugares de interés en municipios priorizados")
-st.markdown("El mapa muestra los punlugarestos de interés entrelazado con infraestructura turística alrededor de aguas termales." + "\n" +
-            "Filtre por la categoría de tipo de lugar a la izquierda.")
+st.title("🗺️ Mapa interactivo de lugares turísticos en municipios priorizados")
+st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
 st_data = st_folium(m, width=800, height=600)
+
+# Interactive data table
+st.markdown("### 📋 Tabla de datos filtrados")
+sorted_df = filtered_df[selected_columns].sort_values(by='average_rating', ascending=False)
+st.dataframe(sorted_df, use_container_width=True)
+
+
+# Botón de descarga
+csv = sorted_df.to_csv(index=False)
+st.download_button(
+    label="⬇️ Descargar datos filtrados (CSV)",
+    data=csv,
+    file_name="datos_filtrados_termales.csv",
+    mime="text/csv"
+)
