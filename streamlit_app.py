@@ -69,9 +69,11 @@ prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "la
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/5/57/Fontur_Colombia_logo.png", width=180)
-st.sidebar.markdown("## Proyecto Fontur")
-st.sidebar.markdown("### Productos Termales")
+st.sidebar.image("datain/fontur_logo.png", width=180)
+st.sidebar.markdown("""
+## Proyecto Fontur  
+**Productos Termales**
+""")
 
 # Divider
 st.sidebar.markdown("---")
