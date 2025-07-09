@@ -70,17 +70,8 @@ prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
 st.sidebar.image("datain/fontur_logo.png", width=180)
+st.sidebar.markdown("----")
 
-# Selector de columnas
-st.sidebar.markdown("----")
-st.sidebar.subheader("Columnas a mostrar")
-all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
-selected_columns = st.sidebar.multiselect(
-    "Seleccione columnas:",
-    options=all_columns,
-    default=all_columns
-)
-st.sidebar.markdown("----")
 
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
@@ -96,6 +87,17 @@ selected_categories = st.sidebar.multiselect(
     options=all_categories,
     default=[first_category]  # Only load the first one by default
 )
+st.sidebar.markdown("----")
+
+# Selector de columnas
+st.sidebar.subheader("Columnas a mostrar")
+all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
+selected_columns = st.sidebar.multiselect(
+    "Seleccione columnas:",
+    options=all_columns,
+    default=all_columns
+)
+
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
