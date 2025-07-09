@@ -68,6 +68,13 @@ prioritized_df["longitude"] = lat_lon_split[1].astype(float)
 prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "latitude", "longitude"]]
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
+# Title Sidebar
+st.sidebar.markdown("""
+<div style='text-align: center; font-size:20px; font-weight:bold; margin-bottom:20px;'>
+    Proyecto Fontur<br><span style='font-size:16px;'>Productos Termales</span>
+</div>
+""", unsafe_allow_html=True)
+
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
