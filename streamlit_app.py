@@ -11,10 +11,10 @@ def load_data():
 df = load_data()
 
 # Sidebar filter
-st.sidebar.title("Filter by Subcategory")
+st.sidebar.title("Filtro por categoría")
 all_categories = sorted(df['sub_category'].unique())
 selected_categories = st.sidebar.multiselect(
-    "Select subcategories to display:",
+    "Seleccione la categoría para filtrar::",
     options=all_categories,
     default=all_categories
 )
@@ -43,6 +43,7 @@ for _, row in filtered_df.iterrows():
     ).add_to(m)
 
 # Display
-st.title("Interactive Map of Points of Interest")
-st.markdown("This map shows categorized touristic infrastructure. Filter by subcategory to explore.")
+st.title("Mapa de lugares de interés en municipios priorizados")
+st.markdown("El mapa muestra los punlugarestos de interés entrelazado con infraestructura turística alrededor de aguas termales." + "\n" +
+            "Filtre por la categoría de tipo de lugar a la izquierda.")
 st_data = st_folium(m, width=800, height=600)
