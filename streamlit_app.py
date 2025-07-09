@@ -12,6 +12,14 @@ def load_data():
 
 df = load_data()
 
+# Replacing NAs
+df['average_rating'] = df['average_rating'].astype(str)
+df['average_rating'] = df['average_rating'].fillna("No Info")
+
+df['user_ratings_total'] = df['user_ratings_total'].fillna(0)
+df['user_ratings_total'] = df['user_ratings_total'].astype(int)
+
+
 # Sidebar filter
 st.sidebar.title("🎯 Filtros")
 all_categories = sorted(df['sub_category'].unique())
@@ -54,7 +62,7 @@ for _, row in filtered_df.iterrows():
                 <b>{row['name']}</b><br>
                 Municipio: {row['municipio']}<br>
                 Subcategoría: {row['sub_category']}<br>
-                
+                Tipo: {row['types']}<br>
                 Rating: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
                 """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
