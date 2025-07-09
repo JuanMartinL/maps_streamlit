@@ -8,7 +8,7 @@ import itertools
 # Load your cleaned dataset
 @st.cache_data
 def load_data():
-    return pd.read_csv("map_data.csv")
+    return pd.read_csv("datain/map_data.csv")
 
 df = load_data()
 
