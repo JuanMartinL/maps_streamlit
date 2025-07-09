@@ -21,7 +21,7 @@ df['user_ratings_total'] = df['user_ratings_total'].astype(int)
 
 
 # Sidebar filter
-st.sidebar.title("🎯 Filtros")
+st.sidebar.title("Filtros")
 all_categories = sorted(df['sub_category'].unique())
 selected_categories = st.sidebar.multiselect(
     "Seleccione una o más categorías:",
@@ -31,7 +31,7 @@ selected_categories = st.sidebar.multiselect(
 
 # Selector de columnas
 st.sidebar.markdown("----")
-st.sidebar.subheader("📌 Columnas a mostrar")
+st.sidebar.subheader("Columnas a mostrar")
 all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
 selected_columns = st.sidebar.multiselect(
     "Seleccione columnas:",
@@ -70,6 +70,7 @@ for _, row in filtered_df.iterrows():
 
 # Display
 st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
+st.markdown("# Proyecto de Productos Turísticos de Termales")
 
 # Interactive data table
 st.markdown("### Tabla de datos filtrados")
