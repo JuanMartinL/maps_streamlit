@@ -54,8 +54,8 @@ for _, row in filtered_df.iterrows():
                 <b>{row['name']}</b><br>
                 Municipio: {row['municipio']}<br>
                 Subcategoría: {row['sub_category']}<br>
-                Tipo: {row['types']}<br>
-                ⭐️ Rating: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
+                
+                Rating: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
                 """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
     ).add_to(m)
