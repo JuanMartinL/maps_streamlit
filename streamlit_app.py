@@ -8,24 +8,29 @@ from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
 
 st.markdown("""
     <style>
-    /* Highlight background inside multiselect dropdown */
+    /* Multiselect (already applied) */
     .stMultiSelect [data-baseweb="tag"] {
         background-color: #9c3675 !important;
     }
-
-    /* Text color inside selected tags */
     .stMultiSelect [data-baseweb="tag"] div {
         color: white !important;
     }
-
-    /* Border focus color */
     .stMultiSelect > div {
         border-color: #9c3675 !important;
     }
-
-    /* Dropdown arrow color */
     .stMultiSelect svg {
         color: #9c3675 !important;
+    }
+
+    /* Checkbox - checkmark and box when checked */
+    input[type="checkbox"]:checked + div > div {
+        background-color: #9c3675 !important;
+        border-color: #9c3675 !important;
+    }
+
+    /* Checkbox - hover focus ring */
+    input[type="checkbox"]:focus + div > div {
+        box-shadow: 0 0 0 0.2rem rgba(156, 54, 117, 0.25) !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -123,7 +128,6 @@ selected_columns = st.sidebar.multiselect(
     options=all_columns,
     default=all_columns
 )
-
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
