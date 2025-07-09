@@ -75,9 +75,6 @@ st.sidebar.markdown("""
 **Productos Termales**
 """)
 
-# Divider
-st.sidebar.markdown("---")
-
 # Selector de columnas
 st.sidebar.markdown("----")
 st.sidebar.subheader("Columnas a mostrar")
