@@ -118,12 +118,20 @@ show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 st.sidebar.markdown("----")
 
 # Selector de columnas
-st.sidebar.subheader("Columnas a mostrar")
-all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
-selected_columns = st.sidebar.multiselect(
-    "Seleccione columnas:",
-    options=all_columns,
-    default=all_columns
+#st.sidebar.subheader("Columnas a mostrar")
+#all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
+#selected_columns = st.sidebar.multiselect(
+#    "Seleccione columnas:",
+#    options=all_columns,
+#    default=all_columns
+#)
+
+# Municipality filter
+all_municipios = sorted(df['municipio'].dropna().unique())
+selected_municipios = st.sidebar.multiselect(
+    "Seleccione uno o más municipios:",
+    options=all_municipios,
+    default=all_municipios
 )
 
 # Filtered data
@@ -193,7 +201,7 @@ st.markdown("### Proyecto de Productos Turísticos de Termales")
 
 # Interactive data table
 st.markdown("### Tabla de datos filtrados")
-sorted_df = filtered_df[selected_columns].sort_values(by='average_rating', ascending=False)
+sorted_df = filtered_df.sort_values(by='average_rating', ascending=False)
 st.dataframe(sorted_df, use_container_width=True)
 
 # Botón de descarga
