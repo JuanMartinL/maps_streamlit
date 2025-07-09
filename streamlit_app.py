@@ -130,7 +130,6 @@ for _, row in prioritized_df.iterrows():
 
 # Legend
 legend_html = """
-{% macro html() %}
 <div style='
     position: fixed; 
     bottom: 50px; left: 50px; width: 280px; 
@@ -141,22 +140,31 @@ legend_html = """
     padding: 10px; 
     box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
 '>
-<b>Leyenda de íconos</b><br>
+<b>🗂️ Leyenda de íconos</b><br>
 <i class="fa fa-utensils" style="color:blue"></i> Restaurantes<br>
-<i class="fa fa-spa" style="color:green"></i> Turismo Termal y Balnearios<br>
-<i class="fa fa-suitcase" style="color:purple"></i> Agencias de viaje y guías<br>
-<i class="fa fa-bus" style="color:orange"></i> Transporte turístico<br>
-<i class="fa fa-landmark" style="color:cadetblue"></i> Culturales<br>
-<i class="fa fa-heartbeat" style="color:pink"></i> Terapias de relajación<br>
+<i class="fa fa-spa" style="color:green"></i> Termales y Balnearios<br>
+<i class="fa fa-suitcase" style="color:purple"></i> Agencias de Viaje<br>
+<i class="fa fa-bus" style="color:orange"></i> Transporte Turístico<br>
+<i class="fa fa-landmark" style="color:cadetblue"></i> Cultura<br>
+<i class="fa fa-heartbeat" style="color:pink"></i> Relajación y Terapias<br>
 <i class="fa fa-bed" style="color:darkred"></i> Alojamiento<br>
 <i class="fa fa-leaf" style="color:darkgreen"></i> Naturaleza<br>
 <i class="fa fa-star" style="color:darkpurple"></i> Termales Priorizados
 </div>
-{% endmacro %}
 """
 
 legend = MacroElement()
-legend._template = Template(legend_html)
+legend._template = Template(f"""
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+{legend_html}
+</body>
+</html>
+""")
 m.get_root().add_child(legend)
 
 # Display
