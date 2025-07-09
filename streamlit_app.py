@@ -69,14 +69,26 @@ prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "la
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
+st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/5/57/Fontur_Colombia_logo.png", width=180)
 st.sidebar.markdown("## Proyecto Fontur")
 st.sidebar.markdown("### Productos Termales")
+
+# Divider
+st.sidebar.markdown("---")
+
+# Selector de columnas
 st.sidebar.markdown("----")
+st.sidebar.subheader("Columnas a mostrar")
+all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
+selected_columns = st.sidebar.multiselect(
+    "Seleccione columnas:",
+    options=all_columns,
+    default=all_columns
+)
 
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
-st.sidebar.markdown("----")
 
 # Sidebar filter
 st.sidebar.title("Filtros")
@@ -87,16 +99,6 @@ selected_categories = st.sidebar.multiselect(
     "Seleccione una o más categorías:",
     options=all_categories,
     default=[first_category]  # Only load the first one by default
-)
-
-# Selector de columnas
-st.sidebar.markdown("----")
-st.sidebar.subheader("Columnas a mostrar")
-all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
-selected_columns = st.sidebar.multiselect(
-    "Seleccione columnas:",
-    options=all_columns,
-    default=all_columns
 )
 
 # Filtered data
