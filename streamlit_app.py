@@ -68,6 +68,10 @@ prioritized_df["longitude"] = lat_lon_split[1].astype(float)
 prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "latitude", "longitude"]]
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
+# Toggles for layers
+show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
+show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
+
 # Sidebar filter
 st.sidebar.title("Filtros")
 all_categories = sorted(df['sub_category'].unique())
@@ -88,10 +92,6 @@ selected_columns = st.sidebar.multiselect(
     options=all_columns,
     default=all_columns
 )
-
-# Toggles for layers
-show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
-show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
