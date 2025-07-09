@@ -111,7 +111,8 @@ for _, row in filtered_df.iterrows():
             Municipio: {row['municipio']}<br>
             Tipo de lugar: {row['sub_category']}<br>
             Tipo: {row['types']}<br>
-            Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
+            Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)<br>
+            Enlace Google: {row['place_link']}
         """,
         icon=folium.Icon(icon=icon_name, color=color, prefix="fa")
     ).add_to(m)
