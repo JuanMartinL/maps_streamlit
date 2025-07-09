@@ -28,13 +28,9 @@ st.markdown("""
         color: #9c3675 !important;
     }
             
-    /* Change the checkbox box background color when checked */
-    input[type="checkbox"]:checked + div > div {
-        background-color: #9c3675 !important;
-        border-color: #9c3675 !important;
-    }
     </style>
 """, unsafe_allow_html=True)
+
 
 # Icon mapping per sub_category
 icon_map = {
