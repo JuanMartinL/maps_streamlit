@@ -4,6 +4,38 @@ import folium
 from streamlit_folium import st_folium
 import itertools
 
+# Icon mapping per sub_category
+icon_map = {
+    "Turismo Termal y Balnearios": ("spa", "green"),
+    "Restaurantes": ("utensils", "blue"),
+    "Agencias de viaje y guías": ("suitcase", "purple"),
+    "Transporte turístico": ("bus", "orange"),
+    "Culturales": ("landmark", "cadetblue"),
+    "Tratamientos y terapias de relajación": ("heartbeat", "pink"),
+    "Terapias alternativas y holísticas": ("leaf", "darkgreen"),
+    "Espiritual y Ancestral": ("place-of-worship", "lightgray"),
+    "Retiros": ("peace", "darkblue"),
+    "Salud": ("medkit", "lightred"),
+    "Financieros": ("money-bill", "gray"),
+    "Transporte Público": ("subway", "lightblue"),
+    "Peajes": ("road", "lightgray"),
+    "Estaciones de servicio": ("gas-pump", "black"),
+    "Naturaleza y Montaña": ("mountain", "darkgreen"),
+    "Naturaleza & Montaña": ("mountain", "darkgreen"),
+    "Caficultura": ("coffee", "brown"),
+    "Artesanías y oficios": ("palette", "orange"),
+    "Agroturismo": ("tractor", "green"),
+    "Cultura y Comunidad": ("users", "purple"),
+    "Alojamiento": ("bed", "darkred"),
+    "Naturales": ("tree", "green"),
+    "Arqueología y fósiles": ("university", "gray"),
+    "Patrimonio colonial": ("archway", "black"),
+    "Cultura ancestral": ("book", "darkpurple"),
+    "Biodiversidad y selva": ("leaf", "darkgreen"),
+    "Arquitectura simbólica": ("building", "gray"),
+    "Naturaleza Extrema": ("bolt", "red")
+}
+
 
 # Load your cleaned dataset
 @st.cache_data
@@ -70,16 +102,17 @@ m = folium.Map(location=[center_lat, center_lon], zoom_start=11)
 
 # Add markers
 for _, row in filtered_df.iterrows():
+    icon_name, color = icon_map.get(row['sub_category'], ("map-marker", "gray"))
     folium.Marker(
         location=[row['latitude'], row['longitude']],
         popup=f"""
-                <b>{row['name']}</b><br>
-                Municipio: {row['municipio']}<br>
-                Tipo de lugar: {row['sub_category']}<br>
-                Tipo: {row['types']}<br>
-                Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
-                """,
-        icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
+            <b>{row['name']}</b><br>
+            Municipio: {row['municipio']}<br>
+            Tipo de lugar: {row['sub_category']}<br>
+            Tipo: {row['types']}<br>
+            Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
+        """,
+        icon=folium.Icon(icon=icon_name, color=color, prefix="fa")
     ).add_to(m)
 
 # Hot Springs
