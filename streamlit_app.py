@@ -89,8 +89,9 @@ selected_columns = st.sidebar.multiselect(
     default=all_columns
 )
 
-# Marker toggle
+# Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
+show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
@@ -115,11 +116,12 @@ Fullscreen(
 ).add_to(m)
 
 
-# Add a heatmap layer as a toggle
-heat_data = [[row['latitude'], row['longitude']] for _, row in filtered_df.iterrows()]
-heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
-HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
-heat_layer.add_to(m)
+# Add a heatmap layer if enabled
+if show_heatmap:
+    heat_data = [[row['latitude'], row['longitude']] for _, row in filtered_df.iterrows()]
+    heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=True)
+    HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
+    heat_layer.add_to(m)
 
 # Add markers
 if show_markers:
