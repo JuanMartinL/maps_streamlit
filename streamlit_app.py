@@ -76,13 +76,6 @@ st.markdown("### Tabla de datos filtrados")
 sorted_df = filtered_df[selected_columns].sort_values(by='average_rating', ascending=False)
 st.dataframe(sorted_df, use_container_width=True)
 
-
-# Display
-st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
-st_data = st_folium(m, width=800, height=600)
-
-
-
 # Botón de descarga
 csv = sorted_df.to_csv(index=False)
 st.download_button(
@@ -91,3 +84,10 @@ st.download_button(
     file_name="datos_filtrados_termales.csv",
     mime="text/csv"
 )
+
+# Display
+st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
+st_data = st_folium(m, width=800, height=600)
+
+
+
