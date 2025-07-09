@@ -4,6 +4,7 @@ import folium
 from streamlit_folium import st_folium
 import itertools
 from branca.element import Template, MacroElement
+from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
 
 # Icon mapping per sub_category
 icon_map = {
@@ -99,7 +100,20 @@ center_lat = filtered_df['latitude'].mean()
 center_lon = filtered_df['longitude'].mean()
 
 # Create folium map
-m = folium.Map(location=[center_lat, center_lon], zoom_start=11)
+
+
+# Initialize the base map
+m = folium.Map(location=[center_lat, center_lon], zoom_start=11, control_scale=True)
+
+# Add a heatmap layer as a toggle
+heat_data = [[row['latitude'], row['longitude']] for _, row in filtered_df.iterrows()]
+heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
+HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
+heat_layer.add_to(m)
+
+# Optional: Add fullscreen control
+Fullscreen(position='topright').add_to(m)
+
 
 # Add markers
 for _, row in filtered_df.iterrows():
@@ -151,6 +165,7 @@ st.download_button(
 
 # Display
 st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
+folium.LayerControl(collapsed=False).add_to(m)
 st_data = st_folium(m, width=800, height=600)
 
 
