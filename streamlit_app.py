@@ -61,22 +61,26 @@ for _, row in filtered_df.iterrows():
         popup=f"""
                 <b>{row['name']}</b><br>
                 Municipio: {row['municipio']}<br>
-                Subcategoría: {row['sub_category']}<br>
+                Tipo de lugar: {row['sub_category']}<br>
                 Tipo: {row['types']}<br>
-                Rating: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
+                Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
                 """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
     ).add_to(m)
 
 # Display
 st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
-st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
-st_data = st_folium(m, width=800, height=600)
 
 # Interactive data table
 st.markdown("### Tabla de datos filtrados")
 sorted_df = filtered_df[selected_columns].sort_values(by='average_rating', ascending=False)
 st.dataframe(sorted_df, use_container_width=True)
+
+
+# Display
+st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
+st_data = st_folium(m, width=800, height=600)
+
 
 
 # Botón de descarga
