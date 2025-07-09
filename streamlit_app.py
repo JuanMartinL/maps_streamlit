@@ -82,6 +82,8 @@ df['average_rating'] = df['average_rating'].fillna("No Info")
 df['user_ratings_total'] = df['user_ratings_total'].fillna(0)
 df['user_ratings_total'] = df['user_ratings_total'].astype(int)
 
+df['municipio'] = df['municipio'].fillna("No Info")
+
 # Prioritized termales
 prioritized_df = load_data_termales()
 
