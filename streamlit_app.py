@@ -8,30 +8,25 @@ from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
 
 st.markdown("""
     <style>
-    /* Highlight background inside multiselect dropdown */
+    /* Multiselect customization */
     .stMultiSelect [data-baseweb="tag"] {
         background-color: #9c3675 !important;
     }
-
-    /* Text color inside selected tags */
     .stMultiSelect [data-baseweb="tag"] div {
         color: white !important;
     }
-
-    /* Border focus color */
     .stMultiSelect > div {
         border-color: #9c3675 !important;
     }
-
-    /* Dropdown arrow color */
     .stMultiSelect svg {
         color: #9c3675 !important;
     }
-            
-    /* Change the checkbox box background color when checked */
-    input[type="checkbox"]:checked + div > div {
-        background-color: #9c3675 !important;
-        border-color: #9c3675 !important;
+
+    /* Checkbox customization */
+    input[type="checkbox"] + div svg {
+        color: #9c3675 !important;
+        stroke: #9c3675 !important;
+        fill: #9c3675 !important;
     }
     </style>
 """, unsafe_allow_html=True)
