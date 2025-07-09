@@ -80,6 +80,7 @@ selected_columns = st.sidebar.multiselect(
     options=all_columns,
     default=all_columns
 )
+st.sidebar.markdown("----")
 
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
