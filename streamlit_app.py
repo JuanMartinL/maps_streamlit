@@ -70,10 +70,6 @@ prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
 st.sidebar.image("datain/fontur_logo.png", width=180)
-st.sidebar.markdown("""
-## Proyecto Fontur  
-**Productos Termales**
-""")
 
 # Selector de columnas
 st.sidebar.markdown("----")
