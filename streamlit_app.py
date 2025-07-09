@@ -111,8 +111,13 @@ heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
 HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
 heat_layer.add_to(m)
 
-# Optional: Add fullscreen control
-Fullscreen(position='topright').add_to(m)
+# Fullscreen
+Fullscreen(
+    position='topright',
+    title='Pantalla completa',
+    title_cancel='Salir de pantalla completa',
+    force_separate_button=True
+).add_to(m)
 
 
 # Add markers
