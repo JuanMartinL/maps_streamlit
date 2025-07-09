@@ -105,12 +105,6 @@ center_lon = filtered_df['longitude'].mean()
 # Initialize the base map
 m = folium.Map(location=[center_lat, center_lon], zoom_start=11, control_scale=True)
 
-# Add a heatmap layer as a toggle
-heat_data = [[row['latitude'], row['longitude']] for _, row in filtered_df.iterrows()]
-heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
-HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
-heat_layer.add_to(m)
-
 # Fullscreen
 Fullscreen(
     position='topright',
@@ -118,6 +112,14 @@ Fullscreen(
     title_cancel='Salir de pantalla completa',
     force_separate_button=True
 ).add_to(m)
+
+
+# Add a heatmap layer as a toggle
+heat_data = [[row['latitude'], row['longitude']] for _, row in filtered_df.iterrows()]
+heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
+HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
+heat_layer.add_to(m)
+
 
 
 # Add markers
