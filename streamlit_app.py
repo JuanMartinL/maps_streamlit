@@ -50,7 +50,12 @@ m = folium.Map(location=[center_lat, center_lon], zoom_start=11)
 for _, row in filtered_df.iterrows():
     folium.Marker(
         location=[row['latitude'], row['longitude']],
-        popup=f"<b>{row['name']}</b><br>{row['municipio']}<br>{row['sub_category']}",
+        popup=f"""
+                <b>{row['name']}</b><br>
+                Municipio: {row['municipio']}<br>
+                Subcategoría: {row['sub_category']}<br>
+                ⭐️ Rating: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
+                """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
     ).add_to(m)
 
