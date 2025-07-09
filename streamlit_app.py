@@ -136,7 +136,11 @@ selected_municipios = st.sidebar.multiselect(
 st.sidebar.markdown("----")
 
 # Filtered data
-filtered_df = df[df['sub_category'].isin(selected_categories)]
+# Apply filters to the dataset
+filtered_df = df[
+    df['sub_category'].isin(selected_categories) &
+    df['municipio'].isin(selected_municipios)
+]
 
 # Assign colors to each subcategory
 colors = itertools.cycle(["blue", "green", "red", "orange", "purple", "darkred", "cadetblue", "pink"])
