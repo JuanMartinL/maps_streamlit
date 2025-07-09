@@ -182,6 +182,6 @@ st_data = st_folium(
     returned_objects=[],
     use_container_width=True
 )
-st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
+
 
 
