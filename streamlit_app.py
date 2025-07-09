@@ -3,6 +3,7 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 import itertools
+from branca.element import Template, MacroElement
 
 # Icon mapping per sub_category
 icon_map = {
@@ -126,6 +127,37 @@ for _, row in prioritized_df.iterrows():
         """,
         icon=folium.Icon(color='darkpurple', icon='water', prefix='fa')
     ).add_to(m)
+
+# Legend
+legend_html = """
+{% macro html() %}
+<div style='
+    position: fixed; 
+    bottom: 50px; left: 50px; width: 280px; 
+    background-color: white; 
+    border:2px solid grey; 
+    z-index:9999; 
+    font-size:14px;
+    padding: 10px; 
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+'>
+<b>Leyenda de íconos</b><br>
+<i class="fa fa-utensils" style="color:blue"></i> Restaurantes<br>
+<i class="fa fa-spa" style="color:green"></i> Turismo Termal y Balnearios<br>
+<i class="fa fa-suitcase" style="color:purple"></i> Agencias de viaje y guías<br>
+<i class="fa fa-bus" style="color:orange"></i> Transporte turístico<br>
+<i class="fa fa-landmark" style="color:cadetblue"></i> Culturales<br>
+<i class="fa fa-heartbeat" style="color:pink"></i> Terapias de relajación<br>
+<i class="fa fa-bed" style="color:darkred"></i> Alojamiento<br>
+<i class="fa fa-leaf" style="color:darkgreen"></i> Naturaleza<br>
+<i class="fa fa-star" style="color:darkpurple"></i> Termales Priorizados
+</div>
+{% endmacro %}
+"""
+
+legend = MacroElement()
+legend._template = Template(legend_html)
+m.get_root().add_child(legend)
 
 # Display
 st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
