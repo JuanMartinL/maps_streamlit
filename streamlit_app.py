@@ -10,7 +10,7 @@ import itertools
 def load_data():
     return pd.read_csv("datain/map_data.csv")
 def load_data_termales():
-    return pd.read_excel("datain/termales_priorizados.xlsx")
+    return pd.read_csv("datain/termales_priorizados.csv")
 
 # Scraped data
 df = load_data()
