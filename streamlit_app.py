@@ -115,7 +115,6 @@ selected_categories = st.sidebar.multiselect(
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
-st.sidebar.markdown("----")
 
 # Selector de columnas
 #st.sidebar.subheader("Columnas a mostrar")
@@ -133,6 +132,8 @@ selected_municipios = st.sidebar.multiselect(
     options=all_municipios,
     default=all_municipios
 )
+
+st.sidebar.markdown("----")
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
