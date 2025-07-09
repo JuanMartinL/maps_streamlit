@@ -6,6 +6,30 @@ import itertools
 from branca.element import Template, MacroElement
 from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
 
+st.markdown("""
+    <style>
+    /* Highlight background inside multiselect dropdown */
+    .stMultiSelect [data-baseweb="tag"] {
+        background-color: #9c3675 !important;
+    }
+
+    /* Text color inside selected tags */
+    .stMultiSelect [data-baseweb="tag"] div {
+        color: white !important;
+    }
+
+    /* Border focus color */
+    .stMultiSelect > div {
+        border-color: #9c3675 !important;
+    }
+
+    /* Dropdown arrow color */
+    .stMultiSelect svg {
+        color: #9c3675 !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Icon mapping per sub_category
 icon_map = {
     "Turismo Termal y Balnearios": ("spa", "green"),
