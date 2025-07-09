@@ -9,7 +9,10 @@ import itertools
 @st.cache_data
 def load_data():
     return pd.read_csv("datain/map_data.csv")
+def load_data_termales():
+    return pd.read_excel("datain/termales_priorizados.xlsx")
 
+# Scraped data
 df = load_data()
 
 # Replacing NAs
@@ -19,6 +22,17 @@ df['average_rating'] = df['average_rating'].fillna("No Info")
 df['user_ratings_total'] = df['user_ratings_total'].fillna(0)
 df['user_ratings_total'] = df['user_ratings_total'].astype(int)
 
+# Prioritized termales
+prioritized_df = load_data_termales()
+
+# Split lat/lon from 'Georreferenciación'
+lat_lon_split = prioritized_df["Georreferenciación"].str.split(",", expand=True)
+prioritized_df["latitude"] = lat_lon_split[0].astype(float)
+prioritized_df["longitude"] = lat_lon_split[1].astype(float)
+
+# Verify structure after transformation
+prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "latitude", "longitude"]]
+prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar filter
 st.sidebar.title("Filtros")
@@ -66,6 +80,18 @@ for _, row in filtered_df.iterrows():
                 Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)
                 """,
         icon=folium.Icon(color=color_map.get(row['sub_category'], "gray"))
+    ).add_to(m)
+
+# Hot Springs
+for _, row in prioritized_df.iterrows():
+    folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=f"""
+            <b>{row['Centro Termal']}</b><br>
+            Municipio: {row['Municipio']}<br>
+            Priorizado: {row['Priorizado']}
+        """,
+        icon=folium.Icon(color='darkpurple', icon='water', prefix='fa')
     ).add_to(m)
 
 # Display
