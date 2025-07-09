@@ -76,6 +76,7 @@ st.sidebar.markdown("----")
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
+st.sidebar.markdown("----")
 
 # Sidebar filter
 st.sidebar.title("Filtros")
