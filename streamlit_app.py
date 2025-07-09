@@ -175,7 +175,13 @@ st.download_button(
 # Display
 st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales. Use los filtros a la izquierda para explorar.")
 folium.LayerControl(collapsed=False).add_to(m)
-st_data = st_folium(m, width=800, height=600)
-
+st_data = st_folium(
+    m,
+    width="100%",      # Responsive width
+    height=600,
+    returned_objects=[],
+    use_container_width=True
+)
+st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
 
