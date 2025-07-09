@@ -189,7 +189,7 @@ for _, row in prioritized_df.iterrows():
 
 # Display
 st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
-st.markdown("# Proyecto de Productos Turísticos de Termales")
+st.markdown("### Proyecto de Productos Turísticos de Termales")
 
 # Interactive data table
 st.markdown("### Tabla de datos filtrados")
