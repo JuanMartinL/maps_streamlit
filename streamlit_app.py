@@ -73,9 +73,6 @@ st.sidebar.image("datain/fontur_logo.png", width=180)
 st.sidebar.markdown("----")
 
 
-# Toggles for layers
-show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
-show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
 # Sidebar filter
 st.sidebar.title("Filtros")
@@ -87,6 +84,11 @@ selected_categories = st.sidebar.multiselect(
     options=all_categories,
     default=[first_category]  # Only load the first one by default
 )
+
+# Toggles for layers
+show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
+show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
+
 st.sidebar.markdown("----")
 
 # Selector de columnas
