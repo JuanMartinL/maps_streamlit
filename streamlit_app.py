@@ -71,10 +71,12 @@ prioritized_df = prioritized_df.dropna(subset=['latitude'])
 # Sidebar filter
 st.sidebar.title("Filtros")
 all_categories = sorted(df['sub_category'].unique())
+first_category = all_categories[0]
+
 selected_categories = st.sidebar.multiselect(
     "Seleccione una o más categorías:",
     options=all_categories,
-    default=all_categories
+    default=[first_category]  # Only load the first one by default
 )
 
 # Selector de columnas
@@ -87,6 +89,8 @@ selected_columns = st.sidebar.multiselect(
     default=all_columns
 )
 
+# Marker toggle
+show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 
 # Filtered data
 filtered_df = df[df['sub_category'].isin(selected_categories)]
@@ -100,9 +104,6 @@ center_lat = filtered_df['latitude'].mean()
 center_lon = filtered_df['longitude'].mean()
 
 # Create folium map
-
-
-# Initialize the base map
 m = folium.Map(location=[center_lat, center_lon], zoom_start=11, control_scale=True)
 
 # Fullscreen
@@ -120,23 +121,22 @@ heat_layer = folium.FeatureGroup(name="Mapa de Calor de POIs", show=False)
 HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(heat_layer)
 heat_layer.add_to(m)
 
-
-
 # Add markers
-for _, row in filtered_df.iterrows():
-    icon_name, color = icon_map.get(row['sub_category'], ("map-marker", "gray"))
-    folium.Marker(
-        location=[row['latitude'], row['longitude']],
-        popup=f"""
-            <b>{row['name']}</b><br>
-            Municipio: {row['municipio']}<br>
-            Tipo de lugar: {row['sub_category']}<br>
-            Tipo: {row['types']}<br>
-            Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)<br>
-            Enlace Google: {row['place_link']}
-        """,
-        icon=folium.Icon(icon=icon_name, color=color, prefix="fa")
-    ).add_to(m)
+if show_markers:
+    for _, row in filtered_df.iterrows():
+        icon_name, color = icon_map.get(row['sub_category'], ("map-marker", "gray"))
+        folium.Marker(
+            location=[row['latitude'], row['longitude']],
+            popup=f"""
+                <b>{row['name']}</b><br>
+                Municipio: {row['municipio']}<br>
+                Tipo de lugar: {row['sub_category']}<br>
+                Tipo: {row['types']}<br>
+                Calificación promedio: {row['average_rating']} ({int(row['user_ratings_total'])} reviews)<br>
+                Enlace Google: {row['place_link']}
+            """,
+            icon=folium.Icon(icon=icon_name, color=color, prefix="fa")
+        ).add_to(m)
 
 # Hot Springs
 for _, row in prioritized_df.iterrows():
