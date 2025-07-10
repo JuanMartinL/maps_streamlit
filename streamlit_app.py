@@ -119,6 +119,7 @@ show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
 
 # Selector de columnas
+selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
 #st.sidebar.subheader("Columnas a mostrar")
 #all_columns = ['name', 'municipio', 'sub_category', 'types', 'average_rating', 'user_ratings_total', 'latitude', 'longitude']
 #selected_columns = st.sidebar.multiselect(
