@@ -209,7 +209,7 @@ st.markdown("### Proyecto de Productos Turísticos de Termales")
 
 # Interactive data table
 st.markdown("### Tabla de datos filtrados")
-sorted_df = filtered_df.sort_values(by='average_rating', ascending=False)
+sorted_df = filtered_df[selected_columns].sort_values(by='average_rating', ascending=False)
 st.dataframe(sorted_df, use_container_width=True)
 
 # Botón de descarga
