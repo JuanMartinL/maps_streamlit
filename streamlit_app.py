@@ -21,17 +21,36 @@ st.markdown("""
     .stMultiSelect svg {
         color: #9c3675 !important;
     }
-    .stMultiSelect [data-baseweb="tag"] button {
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
+
     /* Checkbox customization */
     input[type="checkbox"] + div svg {
         color: #9c3675 !important;
         stroke: #9c3675 !important;
         fill: #9c3675 !important;
+    }
+    /* Tag background */
+    .stMultiSelect [data-baseweb="tag"] {
+        background-color: #9c3675 !important;
+    }
+
+    /* Tag text */
+    .stMultiSelect [data-baseweb="tag"] div {
+        color: white !important;
+    }
+
+    /* Tag border (optional for focus) */
+    .stMultiSelect > div {
+        border-color: #9c3675 !important;
+    }
+
+    /* Dropdown arrow */
+    .stMultiSelect svg {
+        color: #9c3675 !important;
+    }
+
+    /* Fix for ❌ remove icon */
+    .stMultiSelect [data-baseweb="tag"] button {
+        color: white !important;
     }
     </style>
 """, unsafe_allow_html=True)
