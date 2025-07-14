@@ -15,6 +15,9 @@ st.markdown("""
     .stMultiSelect [data-baseweb="tag"] div {
         color: white !important;
     }
+    .stMultiSelect > div {
+        border-color: #9c3675 !important;
+    }
 
 
     /* Checkbox customization */
