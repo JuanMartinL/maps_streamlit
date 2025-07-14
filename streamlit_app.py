@@ -127,14 +127,14 @@ show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 all_categories = sorted(df['info_type'].unique())
 first_category = all_categories[0]
 
-selected_categories = st.sidebar.multiselect(
+selected_macro_categories = st.sidebar.multiselect(
     "Seleccione una o más categorías de tipo de lugar:",
     options=all_categories,
     default=[first_category]  # Only load the first one by default
 )
 
 # Categorias filter
-all_categories = sorted(df['info_type'].unique())
+all_categories = sorted(df['category'].unique())
 first_category = all_categories[0]
 
 selected_categories = st.sidebar.multiselect(
@@ -147,7 +147,7 @@ selected_categories = st.sidebar.multiselect(
 all_categories = sorted(df['sub_category'].unique())
 first_category = all_categories[0]
 
-selected_categories = st.sidebar.multiselect(
+selected_types = st.sidebar.multiselect(
     "Seleccione una o más tipos de lugares:",
     options=all_categories,
     default=[first_category]  # Only load the first one by default
@@ -171,7 +171,9 @@ st.sidebar.markdown("----")
 # Filtered data
 # Apply filters to the dataset
 filtered_df = df[
-    df['sub_category'].isin(selected_categories) &
+    df['info_type'].isin(selected_macro_categories) &
+    df['category'].isin(selected_categories) &
+    df['sub_category'].isin(selected_types) &
     df['municipio'].isin(selected_municipios)
 ]
 
