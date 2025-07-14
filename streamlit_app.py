@@ -19,7 +19,6 @@ st.markdown("""
         border-color: #9c3675 !important;
     }
 
-
     /* Checkbox customization */
     input[type="checkbox"] + div svg {
         color: #9c3675 !important;
@@ -102,18 +101,57 @@ st.sidebar.markdown("----")
 
 # Sidebar filter
 st.sidebar.title("Filtros")
-all_categories = sorted(df['sub_category'].unique())
-first_category = all_categories[0]
 
-selected_categories = st.sidebar.multiselect(
-    "Seleccione una o más categorías:",
-    options=all_categories,
-    default=[first_category]  # Only load the first one by default
+
+# Corredor filter
+all_municipios = sorted(df['corredor'].dropna().unique())
+selected_municipios = st.sidebar.multiselect(
+    "Seleccione uno o más corredores:",
+    options=all_municipios,
+    default=all_municipios
+)
+
+# Municipality filter
+all_municipios = sorted(df['municipio'].dropna().unique())
+selected_municipios = st.sidebar.multiselect(
+    "Seleccione uno o más municipios:",
+    options=all_municipios,
+    default=all_municipios
 )
 
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
+
+# Macro-categorias filter
+all_categories = sorted(df['info_type'].unique())
+first_category = all_categories[0]
+
+selected_categories = st.sidebar.multiselect(
+    "Seleccione una o más categorías de tipo de lugar:",
+    options=all_categories,
+    default=[first_category]  # Only load the first one by default
+)
+
+# Categorias filter
+all_categories = sorted(df['info_type'].unique())
+first_category = all_categories[0]
+
+selected_categories = st.sidebar.multiselect(
+    "Seleccione una o más sub-categorías:",
+    options=all_categories,
+    default=[first_category]  # Only load the first one by default
+)
+
+# Categorias filter
+all_categories = sorted(df['sub_category'].unique())
+first_category = all_categories[0]
+
+selected_categories = st.sidebar.multiselect(
+    "Seleccione una o más tipos de lugares:",
+    options=all_categories,
+    default=[first_category]  # Only load the first one by default
+)
 
 
 # Selector de columnas
@@ -126,13 +164,7 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 #    default=all_columns
 #)
 
-# Municipality filter
-all_municipios = sorted(df['municipio'].dropna().unique())
-selected_municipios = st.sidebar.multiselect(
-    "Seleccione uno o más municipios:",
-    options=all_municipios,
-    default=all_municipios
-)
+
 
 st.sidebar.markdown("----")
 
