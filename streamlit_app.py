@@ -9,7 +9,16 @@ from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
 st.markdown("""
     <style>
     /* Multiselect customization */
+    .stMultiSelect [data-baseweb="tag"] {
+        background-color: #9c3675 !important;
+    }
 
+    .stMultiSelect > div {
+        border-color: #9c3675 !important;
+    }
+    .stMultiSelect svg {
+        color: #9c3675 !important;
+    }
 
     /* Checkbox customization */
     input[type="checkbox"] + div svg {
