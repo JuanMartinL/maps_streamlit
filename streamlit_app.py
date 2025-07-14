@@ -21,7 +21,12 @@ st.markdown("""
     .stMultiSelect svg {
         color: #9c3675 !important;
     }
-
+    .stMultiSelect [data-baseweb="tag"] button {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
     /* Checkbox customization */
     input[type="checkbox"] + div svg {
         color: #9c3675 !important;
