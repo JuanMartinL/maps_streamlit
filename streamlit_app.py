@@ -97,7 +97,21 @@ prioritized_df = prioritized_df.dropna(subset=['latitude'])
 st.sidebar.image("datain/fontur_logo.png", width=180)
 st.sidebar.markdown("----")
 
+# Corredor Filter
+all_corredores = sorted(df['corredor'].dropna().unique())
+selected_corredores = st.sidebar.multiselect(
+    "Seleccione uno o más corredores:",
+    options=all_corredores,
+    default=all_corredores
+)
 
+# Municipality filter
+all_municipios = sorted(df['municipio'].dropna().unique())
+selected_municipios = st.sidebar.multiselect(
+    "Seleccione uno o más municipios:",
+    options=all_municipios,
+    default=all_municipios
+)
 
 # Sidebar filter
 st.sidebar.title("Filtros")
@@ -125,13 +139,7 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 #    default=all_columns
 #)
 
-# Municipality filter
-all_municipios = sorted(df['municipio'].dropna().unique())
-selected_municipios = st.sidebar.multiselect(
-    "Seleccione uno o más municipios:",
-    options=all_municipios,
-    default=all_municipios
-)
+
 
 st.sidebar.markdown("----")
 
@@ -139,7 +147,8 @@ st.sidebar.markdown("----")
 # Apply filters to the dataset
 filtered_df = df[
     df['sub_category'].isin(selected_categories) &
-    df['municipio'].isin(selected_municipios)
+    df['municipio'].isin(selected_municipios) &
+    df['corredor'].isin(selected_corredores)
 ]
 
 # Assign colors to each subcategory
