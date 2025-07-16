@@ -147,8 +147,13 @@ colors = itertools.cycle(["blue", "green", "red", "orange", "purple", "darkred",
 color_map = {cat: next(colors) for cat in all_categories}
 
 # Center of the map
-center_lat = filtered_df['latitude'].mean()
-center_lon = filtered_df['longitude'].mean()
+if not filtered_df.empty and filtered_df[['latitude', 'longitude']].notnull().all().all():
+    center_lat = filtered_df['latitude'].mean()
+    center_lon = filtered_df['longitude'].mean()
+else:
+    # Coordenadas por defecto (Bogotá)
+    center_lat = 4.7110
+    center_lon = -74.0721
 
 # Create folium map
 m = folium.Map(location=[center_lat, center_lon], zoom_start=11, control_scale=True)
