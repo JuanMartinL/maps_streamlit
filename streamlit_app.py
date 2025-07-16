@@ -116,6 +116,7 @@ selected_municipios = st.sidebar.multiselect(
     default=all_municipios
 )
 
+st.sidebar.markdown("----")
 st.sidebar.title("Filtros de elementos del mapa")
 
 # Toggles for layers
@@ -133,6 +134,7 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 #    default=all_columns
 #)
 
+st.sidebar.markdown("----")
 st.sidebar.title("Filtros de tipos de lugares")
 
 # Category 1 Filter
