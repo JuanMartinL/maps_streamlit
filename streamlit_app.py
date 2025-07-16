@@ -94,7 +94,7 @@ prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "la
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
-st.sidebar.image("assets/logo_mincit_fontur.jpeg", width=180)
+st.sidebar.image("assets/logo_mincit_fontur.jpeg", width=240)
 st.sidebar.markdown("----")
 
 # Filtros geograficos
