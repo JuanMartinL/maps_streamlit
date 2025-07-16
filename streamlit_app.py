@@ -97,6 +97,9 @@ prioritized_df = prioritized_df.dropna(subset=['latitude'])
 st.sidebar.image("datain/fontur_logo.png", width=180)
 st.sidebar.markdown("----")
 
+# Filtros geograficos
+st.sidebar.title("Filtros geográficos")
+
 # Corredor Filter
 all_corredores = sorted(df['corredor'].dropna().unique())
 selected_corredores = st.sidebar.multiselect(
@@ -111,17 +114,6 @@ selected_municipios = st.sidebar.multiselect(
     "Seleccione uno o más municipios:",
     options=all_municipios,
     default=all_municipios
-)
-
-# Sidebar filter
-st.sidebar.title("Filtros")
-all_categories = sorted(df['sub_category'].unique())
-first_category = all_categories[0]
-
-selected_categories = st.sidebar.multiselect(
-    "Seleccione una o más categorías:",
-    options=all_categories,
-    default=[first_category]  # Only load the first one by default
 )
 
 # Toggles for layers
@@ -139,7 +131,31 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 #    default=all_columns
 #)
 
+# Category 1 Filter
+all_info_types = sorted(df['info_type'].dropna().unique())
+selected_info_types = st.sidebar.multiselect(
+    "Seleccione uno o más categorías:",
+    options=all_info_types,
+    default=all_info_types
+)
 
+# Category 1 Filter
+all_categories_main = sorted(df['category'].dropna().unique())
+selected_categories_main = st.sidebar.multiselect(
+    "Seleccione una o más sub-categorías:",
+    options=all_categories_main,
+    default=all_categories_main
+)
+
+# Category 3 filter
+all_categories = sorted(df['sub_category'].unique())
+first_category = all_categories[0]
+
+selected_categories = st.sidebar.multiselect(
+    "Seleccione una o más tipos de lugares:",
+    options=all_categories,
+    default=[first_category]  # Only load the first one by default
+)
 
 st.sidebar.markdown("----")
 
@@ -148,7 +164,9 @@ st.sidebar.markdown("----")
 filtered_df = df[
     df['sub_category'].isin(selected_categories) &
     df['municipio'].isin(selected_municipios) &
-    df['corredor'].isin(selected_corredores)
+    df['corredor'].isin(selected_corredores) &
+    df['info_type'].isin(selected_info_types) &
+    df['category'].isin(selected_categories_main)
 ]
 
 # Assign colors to each subcategory
