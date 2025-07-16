@@ -116,6 +116,8 @@ selected_municipios = st.sidebar.multiselect(
     default=all_municipios
 )
 
+st.sidebar.title("Filtros de elementos del mapa")
+
 # Toggles for layers
 show_markers = st.sidebar.checkbox("Mostrar marcadores de puntos de interés", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
