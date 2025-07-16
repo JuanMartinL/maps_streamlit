@@ -5,6 +5,9 @@ from streamlit_folium import st_folium
 import itertools
 from branca.element import Template, MacroElement
 from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
+from PIL import Image
+import base64
+from io import BytesIO
 
 st.markdown("""
     <style>
@@ -27,6 +30,61 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Convertir ícono a base64 para insertarlo como imagen HTML
+icon_datad = Image.open("assets/datad_logo.jpeg")  # este es el nuevo ícono de DataD
+buffered = BytesIO()
+icon_datad.save(buffered, format="PNG")
+icon_base64 = base64.b64encode(buffered.getvalue()).decode()
+
+# HTML + CSS para mostrar logos sin espacio
+with st.sidebar:
+    st.markdown("""
+                    <style>
+                        .logo-container img {
+                            margin: 0px !important;
+                            padding: 0px !important;
+                            background: none !important;
+                            border-radius: 0px !important;
+                            box-shadow: none !important;
+                        }
+                        .css-1v0mbdj.e115fcil1 {
+                            padding-top: 0rem;
+                            padding-bottom: 0rem;
+                        }
+                        .powered-container {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 8px;
+                            margin-top: -10px;
+                            font-size: 11px;
+                            color: grey;
+                        }
+                        .powered-container img {
+                            height: 45px;
+                            width: 45px;
+                            margin-bottom: -2px;
+                            border-radius: 50%; /* 🎯 Esto lo convierte en un círculo */
+                            object-fit: cover;
+                        }
+                    </style>
+                """, unsafe_allow_html=True)    
+
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
+    st.image(logo_cesa, use_container_width =True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown(
+        f"""
+        <div class="powered-container">
+            <img src="data:image/png;base64,{icon_base64}" />
+            <span>Powered by DataD</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 
 # Icon mapping per sub_category
