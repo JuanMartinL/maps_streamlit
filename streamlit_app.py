@@ -32,6 +32,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Convertir ícono a base64 para insertarlo como imagen HTML
+mincit_logo = Image.open("assets/logo_mincit_fontur.jpeg")
 icon_datad = Image.open("assets/datad_logo.jpeg")  # este es el nuevo ícono de DataD
 buffered = BytesIO()
 icon_datad.save(buffered, format="PNG")
@@ -152,7 +153,7 @@ prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "la
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
-st.sidebar.image("assets/logo_mincit_fontur.jpeg", width=240)
+#st.sidebar.image("assets/logo_mincit_fontur.jpeg", width=240)
 st.sidebar.markdown("----")
 
 # Filtros geograficos
