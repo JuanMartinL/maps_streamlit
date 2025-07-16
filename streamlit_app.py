@@ -5,9 +5,6 @@ from streamlit_folium import st_folium
 import itertools
 from branca.element import Template, MacroElement
 from folium.plugins import HeatMap, HeatMapWithTime, MarkerCluster, Fullscreen
-from PIL import Image
-import base64
-from io import BytesIO
 
 st.markdown("""
     <style>
@@ -97,14 +94,7 @@ prioritized_df = prioritized_df[["Centro Termal", "Municipio", "Priorizado", "la
 prioritized_df = prioritized_df.dropna(subset=['latitude'])
 
 # Sidebar header
-st.sidebar.image("datain/fontur_logo.png", width=180)
-
-# DataD Logo
-icon_datad = Image.open("datain/Logo.jpeg")  
-buffered = BytesIO()
-icon_datad.save(buffered, format="PNG")
-icon_base64 = base64.b64encode(buffered.getvalue()).decode()
-
+st.sidebar.image("assets/logo_mincit_fontur.jpeg", width=180)
 st.sidebar.markdown("----")
 
 # Filtros geograficos
