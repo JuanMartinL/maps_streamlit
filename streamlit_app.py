@@ -131,6 +131,8 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 #    default=all_columns
 #)
 
+st.sidebar.title("Filtros de tipos de lugares")
+
 # Category 1 Filter
 all_info_types = sorted(df['info_type'].dropna().unique())
 selected_info_types = st.sidebar.multiselect(
