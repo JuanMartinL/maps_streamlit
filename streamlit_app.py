@@ -31,12 +31,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Convertir ícono a base64 para insertarlo como imagen HTML
+# Logos
 mincit_logo = Image.open("assets/logo_mincit_fontur.jpeg")
-icon_datad = Image.open("assets/datad_logo.jpeg")  # este es el nuevo ícono de DataD
+
+# Icon
+icon_datad = Image.open("assets/datad_logo.jpeg")  
 buffered = BytesIO()
 icon_datad.save(buffered, format="PNG")
-icon_base64 = base64.b64encode(buffered.getvalue()).decode()
+icon_base64 = base64.b64encode(buffered.getvalue()).decode() # Convertir ícono a base64 para insertarlo como imagen HTML
 
 # HTML + CSS para mostrar logos sin espacio
 with st.sidebar:
@@ -196,30 +198,30 @@ selected_columns = ['name', 'municipio', 'sub_category', 'types', 'average_ratin
 st.sidebar.markdown("----")
 st.sidebar.title("Filtros de tipos de lugares")
 
-# Category 1 Filter
+# Step 1: Filtered info_type
 all_info_types = sorted(df['info_type'].dropna().unique())
 selected_info_types = st.sidebar.multiselect(
     "Seleccione uno o más categorías:",
     options=all_info_types,
-    default=all_info_types
+    default=all_info_types[:1]  # default to first one
 )
 
-# Category 1 Filter
-all_categories_main = sorted(df['category'].dropna().unique())
+# Step 2: Filter category based on selected info_type
+filtered_categories_df = df[df['info_type'].isin(selected_info_types)]
+available_categories = sorted(filtered_categories_df['category'].dropna().unique())
 selected_categories_main = st.sidebar.multiselect(
     "Seleccione una o más sub-categorías:",
-    options=all_categories_main,
-    default=all_categories_main
+    options=available_categories,
+    default=available_categories  # you can change this to [] if you want empty by default
 )
 
-# Category 3 filter
-all_categories = sorted(df['sub_category'].unique())
-first_category = all_categories[0]
-
+# Step 3: Filter sub_category based on selected category
+filtered_sub_df = filtered_categories_df[filtered_categories_df['category'].isin(selected_categories_main)]
+available_sub_categories = sorted(filtered_sub_df['sub_category'].dropna().unique())
 selected_categories = st.sidebar.multiselect(
-    "Seleccione una o más tipos de lugares:",
-    options=all_categories,
-    default=[first_category]  # Only load the first one by default
+    "Seleccione uno o más tipos de lugar:",
+    options=available_sub_categories,
+    default=available_sub_categories
 )
 
 st.sidebar.markdown("----")
@@ -227,16 +229,19 @@ st.sidebar.markdown("----")
 # Filtered data
 # Apply filters to the dataset
 filtered_df = df[
+    df['info_type'].isin(selected_info_types) &
+    df['category'].isin(selected_categories_main) &
     df['sub_category'].isin(selected_categories) &
     df['municipio'].isin(selected_municipios) &
-    df['corredor'].isin(selected_corredores) &
-    df['info_type'].isin(selected_info_types) &
-    df['category'].isin(selected_categories_main)
+    df['corredor'].isin(selected_corredores)
 ]
+
+if filtered_df.empty:
+    st.warning("No se encontraron resultados con los filtros seleccionados.")
 
 # Assign colors to each subcategory
 colors = itertools.cycle(["blue", "green", "red", "orange", "purple", "darkred", "cadetblue", "pink"])
-color_map = {cat: next(colors) for cat in all_categories}
+color_map = {cat: next(colors) for cat in available_sub_categories}
 
 # Center of the map
 if not filtered_df.empty and filtered_df[['latitude', 'longitude']].notnull().all().all():
