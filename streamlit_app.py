@@ -172,7 +172,7 @@ selected_corredores = st.sidebar.multiselect(
 
 # Municipality filter
 all_municipios = sorted(df['municipio'].dropna().unique())
-first_municipio = df[df['corredor'] == first_corredor]['municipio'].dropna().unique()[0]
+first_municipio = df[df['corredor'] == first_corredor]['municipio'].dropna().unique()
 selected_municipios = st.sidebar.multiselect(
     "Seleccione uno o más municipios:",
     options=all_municipios,
