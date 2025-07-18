@@ -228,13 +228,23 @@ st.sidebar.markdown("----")
 
 # Filtered data
 # Apply filters to the dataset
-filtered_df = df[
-    df['info_type'].isin(selected_info_types) &
-    df['category'].isin(selected_categories_main) &
-    df['sub_category'].isin(selected_categories) &
-    df['municipio'].isin(selected_municipios) &
-    df['corredor'].isin(selected_corredores)
-]
+filtered_df = df.copy()
+
+# Apply filters only if user selected values
+if selected_info_types:
+    filtered_df = filtered_df[filtered_df['info_type'].isin(selected_info_types)]
+
+if selected_categories_main:
+    filtered_df = filtered_df[filtered_df['category'].isin(selected_categories_main)]
+
+if selected_categories:
+    filtered_df = filtered_df[filtered_df['sub_category'].isin(selected_categories)]
+
+if selected_municipios:
+    filtered_df = filtered_df[filtered_df['municipio'].isin(selected_municipios)]
+
+if selected_corredores:
+    filtered_df = filtered_df[filtered_df['corredor'].isin(selected_corredores)]
 
 if filtered_df.empty:
     st.warning("No se encontraron resultados con los filtros seleccionados.")
