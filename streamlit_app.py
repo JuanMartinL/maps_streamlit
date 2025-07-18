@@ -107,7 +107,7 @@ else:
 # 3️⃣ info_type (after municipios)
 if sel_mun:
     info_all = sorted(df[df["municipio"].isin(sel_mun)]["info_type"].dropna().unique())
-    sel_info = st.sidebar.multiselect("Seleccione la categoría de lugares", info_all, default=[])
+    sel_info = st.sidebar.multiselect("Seleccione la categoría", info_all, default=[])
 else:
     sel_info = []
 
