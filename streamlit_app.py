@@ -145,12 +145,4 @@ if selected_info and not fdf.empty:
     # termales
     for _,r in termales.iterrows(): folium.Marker([r['latitude'],r['longitude']], icon=folium.Icon(color='darkpurple',icon='water',prefix='fa')).add_to(m)
     folium.LayerControl(collapsed=False).add_to(m)
-    st_folium(m, width='100%',height=600)
-    # table
-    st.markdown('### Datos filtrados')
-    cols=['name','municipio','sub_category','types','average_rating','user_ratings_total','latitude','longitude']
-    table=fdf[cols].sort_values('average_rating',ascending=False)
-    st.dataframe(table,use_container_width=True)
-    st.download_button('Descargar CSV',table.to_csv(index=False),file_name='datos.csv',mime='text/csv')
-else:
-    st.info('Seleccione corredor, municipios e info_type para mostrar datos.')
+    st_folium(m, height=600, use_container_width=True)
