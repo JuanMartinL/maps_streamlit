@@ -107,7 +107,7 @@ else:
 # 3️⃣ info_type (after municipios)
 if sel_mun:
     info_all = sorted(df[df["municipio"].isin(sel_mun)]["info_type"].dropna().unique())
-    sel_info = st.sidebar.multiselect("Seleccione tipo de información", info_all, default=[])
+    sel_info = st.sidebar.multiselect("Seleccione la categoría de lugares", info_all, default=[])
 else:
     sel_info = []
 
@@ -115,10 +115,10 @@ else:
 if sel_info:
     tmp = df[df["info_type"].isin(sel_info)]
     cat_all = sorted(tmp["category"].dropna().unique())
-    sel_cat = st.sidebar.multiselect("Seleccione categoría", cat_all, default=[])
+    sel_cat = st.sidebar.multiselect("Seleccione la sub-categoría", cat_all, default=[])
     tmp2 = tmp[tmp["category"].isin(sel_cat)] if sel_cat else tmp
     sub_all = sorted(tmp2["sub_category"].dropna().unique())
-    sel_sub = st.sidebar.multiselect("Seleccione tipo de lugar", sub_all, default=[])
+    sel_sub = st.sidebar.multiselect("Seleccione las actividades turísticas", sub_all, default=[])
 else:
     sel_cat = []
     sel_sub = []
