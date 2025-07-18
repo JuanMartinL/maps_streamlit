@@ -163,20 +163,21 @@ st.sidebar.title("Filtros geográficos")
 
 # Corredor Filter
 all_corredores = sorted(df['corredor'].dropna().unique())
-first_corredor = df['corredor'].dropna().unique()[0]
 selected_corredores = st.sidebar.multiselect(
     "Seleccione uno o más corredores:",
     options=all_corredores,
-    default=first_corredor
+    default=[]
 )
 
-# Municipality filter
-all_municipios = sorted(df['municipio'].dropna().unique())
-first_municipio = df[df['corredor'] == first_corredor]['municipio'].dropna().unique()
+# Filter df by selected corredores (if any) to extract relevant municipios
+filtered_by_corr = df[df['corredor'].isin(selected_corredores)] if selected_corredores else df
+available_municipios = sorted(filtered_by_corr['municipio'].dropna().unique())
+
+# Show only municipios that belong to selected corredores
 selected_municipios = st.sidebar.multiselect(
     "Seleccione uno o más municipios:",
-    options=all_municipios,
-    default=first_municipio
+    options=available_municipios,
+    default=[]
 )
 
 st.sidebar.markdown("----")
@@ -233,6 +234,12 @@ st.sidebar.markdown("----")
 filtered_df = df.copy()
 
 # Apply filters only if user selected values
+if selected_corredores:
+    filtered_df = filtered_df[filtered_df['corredor'].isin(selected_corredores)]
+
+if selected_municipios:
+    filtered_df = filtered_df[filtered_df['municipio'].isin(selected_municipios)]
+
 if selected_info_types:
     filtered_df = filtered_df[filtered_df['info_type'].isin(selected_info_types)]
 
