@@ -50,10 +50,6 @@ with st.sidebar:
                 border-radius: 0px !important;
                 box-shadow: none !important;
             }
-            .css-1v0mbdj.e115fcil1 {
-                padding-top: 0rem;
-                padding-bottom: 0rem;
-            }
             .powered-container {
                 display: flex;
                 justify-content: center;
@@ -168,8 +164,8 @@ filtered_cat = filtered_info[filtered_info['category'].isin(selected_categories)
 available_sub = sorted(filtered_cat['sub_category'].dropna().unique())
 selected_sub = st.sidebar.multiselect("Seleccione uno o más tipos de lugar:", available_sub, default=[])
 
-# Layer toggles
 st.sidebar.markdown("----")
+# Layer toggles
 show_markers = st.sidebar.checkbox("Mostrar marcadores", value=True)
 show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
 
@@ -186,11 +182,14 @@ if selected_categories:
 if selected_sub:
     filtered_df = filtered_df[filtered_df['sub_category'].isin(selected_sub)]
 
+# Determine if any filter is active
+filters_selected = any([selected_corredores, selected_municipios, selected_info_types, selected_categories, selected_sub])
+
 # --- Main Page ---
 st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
 st.markdown("Seleccione filtros para visualizar los datos en el mapa.")
 
-if not filtered_df.empty:
+if filters_selected and not filtered_df.empty:
     # Assign colors dynamically
     colors = itertools.cycle(["blue","green","red","orange","purple","darkred","cadetblue","pink"])
     color_map = {cat: next(colors) for cat in available_sub}
