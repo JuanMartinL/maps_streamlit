@@ -144,7 +144,9 @@ ready_to_plot = bool(sel_info)
 # ░M░A░I░N░  C░O░N░T░E░N░T░
 # --------------------------------------------------
 st.title("Mapa interactivo de productos turísticos")
-st.markdown("Use los filtros en secuencia: **corredor → municipios → info_type** para visualizar datos.")
+
+st.markdown("Este mapa muestra lugares de interés relacionados con infraestructura turística alrededor de aguas termales.")
+st.markdown("Use los filtros a la izquierda en secuencia para explorar.: **corredor → municipios → categoría** para visualizar datos.")
 
 if ready_to_plot and not fdf.empty:
     # color map per current subs
