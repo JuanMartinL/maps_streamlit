@@ -163,18 +163,20 @@ st.sidebar.title("Filtros geográficos")
 
 # Corredor Filter
 all_corredores = sorted(df['corredor'].dropna().unique())
+first_corredor = df['corredor'].dropna().unique()[0]
 selected_corredores = st.sidebar.multiselect(
     "Seleccione uno o más corredores:",
     options=all_corredores,
-    default=all_corredores
+    default=first_corredor
 )
 
 # Municipality filter
 all_municipios = sorted(df['municipio'].dropna().unique())
+first_municipio = df[df['corredor'] == first_corredor]['municipio'].dropna().unique()
 selected_municipios = st.sidebar.multiselect(
     "Seleccione uno o más municipios:",
     options=all_municipios,
-    default=all_municipios
+    default=first_municipio
 )
 
 st.sidebar.markdown("----")
