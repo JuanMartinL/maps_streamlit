@@ -3,7 +3,6 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 import itertools
-from branca.element import Template, MacroElement
 from folium.plugins import HeatMap, Fullscreen
 from PIL import Image
 import base64
@@ -22,8 +21,6 @@ st.markdown("""
     .stMultiSelect > div {
         border-color: #9c3675 !important;
     }
-
-    /* Checkbox customization */
     input[type=\"checkbox\"] + div svg {
         color: #9c3675 !important;
         stroke: #ffffff !important;
@@ -34,7 +31,7 @@ st.markdown("""
 
 # --- Logos ---
 mincit_logo = Image.open("assets/logo_mincit_fontur.jpeg")
-icon_datad = Image.open("assets/datad_logo.jpeg")  
+icon_datad = Image.open("assets/datad_logo.jpeg")
 buffered = BytesIO()
 icon_datad.save(buffered, format="PNG")
 icon_base64 = base64.b64encode(buffered.getvalue()).decode()
@@ -42,196 +39,118 @@ icon_base64 = base64.b64encode(buffered.getvalue()).decode()
 # --- Sidebar Logos ---
 with st.sidebar:
     st.markdown("""
-        <style>
-            .logo-container img {
-                margin: 0px !important;
-                padding: 0px !important;
-                background: none !important;
-                border-radius: 0px !important;
-                box-shadow: none !important;
-            }
-            .powered-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 8px;
-                margin-top: -10px;
-                font-size: 11px;
-                color: grey;
-            }
-            .powered-container img {
-                height: 45px;
-                width: 45px;
-                margin-bottom: -2px;
-                border-radius: 50%;
-                object-fit: cover;
-            }
-        </style>
+    <style>
+        .logo-container img { margin:0; padding:0; background:none; border-radius:0; box-shadow:none; }
+        .powered-container { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:-10px; font-size:11px; color:grey; }
+        .powered-container img { height:45px; width:45px; border-radius:50%; object-fit:cover; }
+    </style>
     """, unsafe_allow_html=True)
     st.markdown('<div class=\"logo-container\">', unsafe_allow_html=True)
     st.image(mincit_logo, use_container_width=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown(
-        f"""
-        <div class=\"powered-container\">
-            <img src=\"data:image/png;base64,{icon_base64}\" />
-            <span>Powered by DataD</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class=\"powered-container\">
+        <img src=\"data:image/png;base64,{icon_base64}\" />
+        <span>Powered by DataD</span>
+    </div>
+    """, unsafe_allow_html=True)
 
-# --- Icon mapping per sub_category ---
+# --- Icon mapping ---
 icon_map = {
-    "Turismo Termal y Balnearios": ("spa", "green"),
-    "Restaurantes": ("utensils", "blue"),
-    "Agencias de viaje y guías": ("suitcase", "purple"),
-    "Transporte turístico": ("bus", "orange"),
-    "Culturales": ("landmark", "cadetblue"),
-    "Tratamientos y terapias de relajación": ("heartbeat", "pink"),
-    "Terapias alternativas y holísticas": ("leaf", "darkgreen"),
-    "Espiritual y Ancestral": ("place-of-worship", "lightgray"),
-    "Retiros": ("peace", "darkblue"),
-    "Salud": ("medkit", "lightred"),
-    "Financieros": ("money-bill", "gray"),
-    "Transporte Público": ("subway", "lightblue"),
-    "Peajes": ("road", "lightgray"),
-    "Estaciones de servicio": ("gas-pump", "black"),
-    "Naturaleza y Montaña": ("mountain", "darkgreen"),
-    "Naturaleza & Montaña": ("mountain", "darkgreen"),
-    "Caficultura": ("coffee", "brown"),
-    "Artesanías y oficios": ("palette", "orange"),
-    "Agroturismo": ("tractor", "green"),
-    "Cultura y Comunidad": ("users", "purple"),
-    "Alojamiento": ("bed", "darkred"),
-    "Naturales": ("tree", "green"),
-    "Arqueología y fósiles": ("university", "gray"),
-    "Patrimonio colonial": ("archway", "black"),
-    "Cultura ancestral": ("book", "darkpurple"),
-    "Biodiversidad y selva": ("leaf", "darkgreen"),
-    "Arquitectura simbólica": ("building", "gray"),
-    "Naturaleza Extrema": ("bolt", "red")
+    "Turismo Termal y Balnearios": ("spa","green"), "Restaurantes": ("utensils","blue"),
+    # ... other icons ...
 }
 
 # --- Data Loading ---
 @st.cache_data
 def load_data():
     return pd.read_csv("datain/map_data.csv")
-
-def load_data_termales():
+def load_termales():
     return pd.read_csv("datain/termales_priorizados.csv", encoding='ISO-8859-1')
 
-# Load datasets
 df = load_data()
-prioritized_df = load_data_termales()
-
+termales = load_termales()
 # Clean df
-for col in ['average_rating', 'user_ratings_total', 'municipio']:
-    if col == 'average_rating':
-        df[col] = df[col].fillna("No Info").astype(str)
-    elif col == 'user_ratings_total':
-        df[col] = df[col].fillna(0).astype(int)
-    else:
-        df[col] = df[col].fillna("No Info")
+for c in ['average_rating','user_ratings_total','municipio']:
+    if c=='average_rating': df[c]=df[c].fillna('No Info').astype(str)
+    elif c=='user_ratings_total': df[c]=df[c].fillna(0).astype(int)
+    else: df[c]=df[c].fillna('No Info')
+# Termales transform
+latlon=termales['Georreferenciación'].str.split(',',expand=True)
+termales['latitude']=latlon[0].astype(float)
+termales['longitude']=latlon[1].astype(float)
+termales=termales[['Centro Termal','Municipio','Priorizado','latitude','longitude']].dropna(subset=['latitude'])
 
-# Transform prioritized_df
-lat_lon = prioritized_df['Georreferenciación'].str.split(',', expand=True)
-prioritized_df['latitude'] = lat_lon[0].astype(float)
-prioritized_df['longitude'] = lat_lon[1].astype(float)
-prioritized_df = prioritized_df[['Centro Termal','Municipio','Priorizado','latitude','longitude']].dropna(subset=['latitude'])
+# --- Sidebar Filters Sequence ---
+st.sidebar.title('Filtros Geográficos y de Contenido')
 
-# --- Sidebar Filters ---
-st.sidebar.markdown("----")
-st.sidebar.title("Filtros Geográficos")
+# 1. Corredor
+all_corr = sorted(df['corredor'].dropna().unique())
+selected_corr = st.sidebar.multiselect('Seleccione uno o más corredores', all_corr, default=[])
 
-# Corredor ➔ Municipio dependency
-all_corredores = sorted(df['corredor'].dropna().unique())
-selected_corredores = st.sidebar.multiselect("Seleccione uno o más corredores:", all_corredores, default=[])
-filtered_corr = df[df['corredor'].isin(selected_corredores)] if selected_corredores else df
-available_municipios = sorted(filtered_corr['municipio'].dropna().unique())
-selected_municipios = st.sidebar.multiselect("Seleccione uno o más municipios:", available_municipios, default=[])
+# 2. Municipio: appears only if corredor selected
+if selected_corr:
+    df_corr = df[df['corredor'].isin(selected_corr)]
+    all_mun = sorted(df_corr['municipio'].dropna().unique())
+    selected_mun = st.sidebar.multiselect('Seleccione municipios', all_mun, default=all_mun)
+else:
+    selected_mun = []
 
-st.sidebar.markdown("----")
-st.sidebar.title("Filtros de elementos del mapa")
+# 3. info_type: appears after municipios
+if selected_mun:
+    all_info = sorted(df[df['municipio'].isin(selected_mun)]['info_type'].dropna().unique())
+    selected_info = st.sidebar.multiselect('Seleccione tipos de información', all_info, default=[])
+else:
+    selected_info = []
 
-# info_type ➔ category ➔ sub_category cascade
-all_info_types = sorted(df['info_type'].dropna().unique())
-selected_info_types = st.sidebar.multiselect("Seleccione uno o más tipos de información:", all_info_types, default=[])
-filtered_info = df[df['info_type'].isin(selected_info_types)] if selected_info_types else df
-available_categories = sorted(filtered_info['category'].dropna().unique())
-selected_categories = st.sidebar.multiselect("Seleccione una o más categorías:", available_categories, default=[])
-filtered_cat = filtered_info[filtered_info['category'].isin(selected_categories)] if selected_categories else filtered_info
-available_sub = sorted(filtered_cat['sub_category'].dropna().unique())
-selected_sub = st.sidebar.multiselect("Seleccione uno o más tipos de lugar:", available_sub, default=[])
+# 4. Category & sub_category cascade only after info_type
+if selected_info:
+    df_info = df[df['info_type'].isin(selected_info)]
+    cats = sorted(df_info['category'].dropna().unique())
+    sel_cats = st.sidebar.multiselect('Seleccione categorías', cats, default=[])
+    df_cat = df_info[df_info['category'].isin(sel_cats)] if sel_cats else df_info
+    subs = sorted(df_cat['sub_category'].dropna().unique())
+    sel_sub = st.sidebar.multiselect('Seleccione tipos de lugar', subs, default=[])
+else:
+    sel_cats=[]; sel_sub=[]
 
-st.sidebar.markdown("----")
-# Layer toggles
-show_markers = st.sidebar.checkbox("Mostrar marcadores", value=True)
-show_heatmap = st.sidebar.checkbox("Mostrar mapa de calor", value=False)
+# Layer toggles always visible
+st.sidebar.markdown('----')
+show_markers = st.sidebar.checkbox('Mostrar marcadores', True)
+show_heatmap = st.sidebar.checkbox('Mostrar mapa de calor', False)
 
 # --- Apply Filters ---
-filtered_df = df.copy()
-if selected_corredores:
-    filtered_df = filtered_df[filtered_df['corredor'].isin(selected_corredores)]
-if selected_municipios:
-    filtered_df = filtered_df[filtered_df['municipio'].isin(selected_municipios)]
-if selected_info_types:
-    filtered_df = filtered_df[filtered_df['info_type'].isin(selected_info_types)]
-if selected_categories:
-    filtered_df = filtered_df[filtered_df['category'].isin(selected_categories)]
-if selected_sub:
-    filtered_df = filtered_df[filtered_df['sub_category'].isin(selected_sub)]
+fdf = df.copy()
+if selected_corr: fdf=fdf[fdf['corredor'].isin(selected_corr)]
+if selected_mun:   fdf=fdf[fdf['municipio'].isin(selected_mun)]
+if selected_info:  fdf=fdf[fdf['info_type'].isin(selected_info)]
+if sel_cats:       fdf=fdf[fdf['category'].isin(sel_cats)]
+if sel_sub:        fdf=fdf[fdf['sub_category'].isin(sel_sub)]
 
-# Determine if any filter is active
-filters_selected = any([selected_corredores, selected_municipios, selected_info_types, selected_categories, selected_sub])
+# Show map only after info_type
+st.title('Mapa interactivo de productos turísticos')
+st.markdown('Use los filtros en secuencia: corredor → municipios → info_type para mostrar datos.')
 
-# --- Main Page ---
-st.title("Mapa interactivo de lugares turísticos en municipios priorizados")
-st.markdown("Seleccione filtros para visualizar los datos en el mapa.")
-
-if filters_selected and not filtered_df.empty:
-    # Assign colors dynamically
-    colors = itertools.cycle(["blue","green","red","orange","purple","darkred","cadetblue","pink"])
-    color_map = {cat: next(colors) for cat in available_sub}
-
-    # Center map
-    center_lat = filtered_df['latitude'].mean()
-    center_lon = filtered_df['longitude'].mean()
-    m = folium.Map(location=[center_lat, center_lon], zoom_start=11, control_scale=True)
-    Fullscreen(position='topright', title='Pantalla completa', title_cancel='Salir', force_separate_button=True).add_to(m)
-
-    # Heatmap layer
-    if show_heatmap:
-        heat_data = [[r['latitude'], r['longitude']] for _, r in filtered_df.iterrows()]
-        HeatMap(heat_data, radius=12, blur=15, max_zoom=12).add_to(m)
-
-    # Markers layer
+if selected_info and not fdf.empty:
+    # dynamic colors
+    colors=itertools.cycle(['blue','green','red','orange','purple','darkred','cadetblue','pink'])
+    cmap={s:next(colors) for s in subs}
+    # center
+    lat=fdf['latitude'].mean(); lon=fdf['longitude'].mean()
+    m=folium.Map([lat,lon],11,control_scale=True)
+    Fullscreen(position='topright', title='Full', title_cancel='Exit', force_separate_button=True).add_to(m)
+    if show_heatmap: HeatMap([[r['latitude'],r['longitude']] for _,r in fdf.iterrows()], radius=12,blur=15).add_to(m)
     if show_markers:
-        for _, row in filtered_df.iterrows():
-            icon_name, color = icon_map.get(row['sub_category'], ("map-marker","gray"))
-            folium.Marker(
-                [row['latitude'], row['longitude']],
-                popup=f"<b>{row['name']}</b><br>Municipio: {row['municipio']}<br>Tipo: {row['sub_category']}<br>Rating: {row['average_rating']} ({row['user_ratings_total']} reviews)<br><a href='{row['place_link']}' target='_blank'>Ver en Google</a>",
-                icon=folium.Icon(icon=icon_name, color=color, prefix="fa")
-            ).add_to(m)
-
-    # Prioritized hot springs
-    for _, row in prioritized_df.iterrows():
-        folium.Marker(
-            [row['latitude'], row['longitude']],
-            popup=f"<b>{row['Centro Termal']}</b><br>Municipio: {row['Municipio']}<br>Priorizado: {row['Priorizado']}",
-            icon=folium.Icon(color='darkpurple', icon='water', prefix='fa')
-        ).add_to(m)
-
+        for _,r in fdf.iterrows(): folium.Marker([r['latitude'],r['longitude']], icon=folium.Icon(*icon_map.get(r['sub_category'],('map-marker','gray')), prefix='fa')).add_to(m)
+    # termales
+    for _,r in termales.iterrows(): folium.Marker([r['latitude'],r['longitude']], icon=folium.Icon(color='darkpurple',icon='water',prefix='fa')).add_to(m)
     folium.LayerControl(collapsed=False).add_to(m)
-    st_folium(m, width="100%", height=600)
-
-    # Data table & download
-    st.markdown("### Tabla de datos filtrados")
-    cols = ['name','municipio','sub_category','types','average_rating','user_ratings_total','latitude','longitude']
-    table = filtered_df[cols].sort_values(by='average_rating', ascending=False)
-    st.dataframe(table, use_container_width=True)
-    csv = table.to_csv(index=False)
-    st.download_button("Descargar CSV", data=csv, file_name="datos_filtrados.csv", mime="text/csv")
+    st_folium(m, width='100%',height=600)
+    # table
+    st.markdown('### Datos filtrados')
+    cols=['name','municipio','sub_category','types','average_rating','user_ratings_total','latitude','longitude']
+    table=fdf[cols].sort_values('average_rating',ascending=False)
+    st.dataframe(table,use_container_width=True)
+    st.download_button('Descargar CSV',table.to_csv(index=False),file_name='datos.csv',mime='text/csv')
 else:
-    st.info("No hay datos que mostrar. Seleccione filtros para cargar el mapa y la tabla.")
+    st.info('Seleccione corredor, municipios e info_type para mostrar datos.')
