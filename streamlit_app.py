@@ -149,6 +149,20 @@ st.markdown("Este mapa muestra lugares de interés relacionados con infraestruct
 st.markdown("Use los filtros a la izquierda en secuencia para explorar.: **corredor → municipios → categoría** para visualizar datos.")
 
 if ready_to_plot and not fdf.empty:
+    # ---------------- Table & download ----------------
+    st.markdown("### Tabla de datos filtrados")
+    show_cols = [
+        "name","municipio","sub_category","types","average_rating","user_ratings_total","latitude","longitude"
+    ]
+    table = fdf[show_cols].sort_values(by="average_rating", ascending=False)
+    st.dataframe(table, use_container_width=True)
+    st.download_button(
+        "Descargar CSV",
+        data=table.to_csv(index=False),
+        file_name="datos_filtrados.csv",
+        mime="text/csv"
+    )
+    
     # color map per current subs
     color_cycle = itertools.cycle(["blue","green","red","orange","purple","darkred","cadetblue","pink"])
     current_colors = {s: next(color_cycle) for s in (fdf["sub_category"].unique())}
@@ -186,18 +200,6 @@ if ready_to_plot and not fdf.empty:
     folium.LayerControl(collapsed=False).add_to(fmap)
     st_folium(fmap, height=600, use_container_width=True)
 
-    # ---------------- Table & download ----------------
-    st.markdown("### Tabla de datos filtrados")
-    show_cols = [
-        "name","municipio","sub_category","types","average_rating","user_ratings_total","latitude","longitude"
-    ]
-    table = fdf[show_cols].sort_values(by="average_rating", ascending=False)
-    st.dataframe(table, use_container_width=True)
-    st.download_button(
-        "Descargar CSV",
-        data=table.to_csv(index=False),
-        file_name="datos_filtrados.csv",
-        mime="text/csv"
-    )
+
 else:
     st.info("Seleccione corredor, municipios e info_type para mostrar el mapa y la tabla de datos.")
