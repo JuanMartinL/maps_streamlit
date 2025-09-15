@@ -29,7 +29,7 @@ st.markdown(
 )
 
 # --------------------------------------------------
-# ░L░O░G░O░S░  (sidebar)
+# LOGOS  (sidebar)
 # --------------------------------------------------
 mincit_logo = Image.open("assets/logo_mincit_fontur.jpeg")
 icon_datad  = Image.open("assets/datad_logo.jpeg")
